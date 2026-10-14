@@ -20,7 +20,7 @@ Why it matters. Workflow Core has `WaitFor` for one event. Users keep asking how
 | Approval workflow | Toy. One counter step after the wait. No external IO. |
 | Durability across a host restart | Not shown. In-memory store only. |
 
-`bash demo.sh` passes 10 of 10 checks on a fresh clone. `bash demo.sh --break` fails checks 2 through 6 and exits 1. `bash demo.sh --break cleanup` fails checks 5 and 5b and exits 1.
+`bash demo.sh` passes 10 of 10 checks on a fresh clone. `bash demo.sh --break` fails checks 2 through 7 and exits 1. `bash demo.sh --break cleanup` fails checks 5 and 5b and exits 1.
 
 ## Data shape
 
@@ -76,7 +76,7 @@ cd waitany-event
 bash demo.sh
 ```
 
-Expected: ten `CHECK PASS` lines, a results table, then `RESULT: PASS`, exit 0. It takes about 15 seconds after the first restore. Most of that is check 9 waiting 5 seconds to show the baseline hangs.
+Expected: ten `CHECK PASS` lines, a results table, then `RESULT: PASS`, exit 0. It takes about 10 seconds after the first restore. Most of that is check 9 waiting 5 seconds to show the baseline hangs.
 
 ```
 CHECK PASS  1 build: WaitAny + demo compile against WorkflowCore 3.21.0
@@ -101,7 +101,7 @@ bash demo.sh --break cleanup
 
 Both copy `src/` to `.demo/src/`, delete one exact string from the copy, then build and run the copy. The script exits 2 if the string is not found, so a sabotage can never silently do nothing. The real `src/` is never touched, so `bash demo.sh` passes again right after.
 
-- `cancel` removes the `cancelCondition` argument from `WaitAny`. Publishing only `Approve` leaves the instance `Runnable` with the `Reject` wait open. Checks 2 to 6 fail.
+- `cancel` removes the `cancelCondition` argument from `WaitAny`. Publishing only `Approve` leaves the instance `Runnable` with the `Reject` wait open. Checks 2 to 7 fail.
 - `cleanup` removes the `TerminateSubscription` call. The workflow still completes, but the losing subscription stays in the store. Checks 5 and 5b fail.
 
 Raw output lands in `.demo/` (`results.jsonl`, `host.log`, `build.log`).
